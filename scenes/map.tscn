@@ -1,14 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://p2v1c0bbi0yh"]
+[gd_scene load_steps=6 format=3 uid="uid://p2v1c0bbi0yh"]
 
 [ext_resource type="Script" path="res://scripts/score.gd" id="1_4x4nt"]
-[ext_resource type="Script" path="res://scenes/ready.gd" id="1_8p448"]
+[ext_resource type="Script" path="res://scripts/ready.gd" id="1_8p448"]
 [ext_resource type="PackedScene" uid="uid://bovwln050jr5v" path="res://scenes/paddle.tscn" id="1_177xy"]
 [ext_resource type="PackedScene" uid="uid://dc383w8hnix75" path="res://scenes/ball.tscn" id="2_1gs5e"]
-[ext_resource type="PackedScene" uid="uid://dnvu86brv1af7" path="res://scenes/boundary.tscn" id="4_1k5a0"]
-[ext_resource type="Script" path="res://scripts/back_wall.gd" id="5_i16g4"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_smfwi"]
-size = Vector2(38, 1281)
+[ext_resource type="PackedScene" uid="uid://dfhxt87xbnccl" path="res://scenes/boundary.tscn" id="4_1k5a0"]
 
 [node name="Map" type="Node2D"]
 
@@ -34,40 +30,38 @@ script = ExtResource("1_8p448")
 [node name="Timer" type="Timer" parent="Labels/Ready"]
 
 [node name="Score" type="RichTextLabel" parent="Labels"]
-offset_left = 1.0
-offset_top = 10.0
-offset_right = 953.0
-offset_bottom = 117.0
-theme_override_font_sizes/normal_font_size = 25
-text = "  High Score:
-  Score: "
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -470.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/normal_font_size = 60
+bbcode_enabled = true
+text = "[center]0-0"
 script = ExtResource("1_4x4nt")
 
 [node name="Ball" parent="." instance=ExtResource("2_1gs5e")]
-position = Vector2(915, 37)
+position = Vector2(480, 72)
 
 [node name="Paddle" parent="." instance=ExtResource("1_177xy")]
 position = Vector2(50, 250)
 
+[node name="Paddle2" parent="." instance=ExtResource("1_177xy")]
+position = Vector2(910, 250)
+player_num = 2
+
 [node name="Boundary" parent="." instance=ExtResource("4_1k5a0")]
-position = Vector2(-800, 159)
+position = Vector2(-87, 251)
+scale = Vector2(1.01793, 60.9379)
 
-[node name="BackWall" type="Area2D" parent="."]
-script = ExtResource("5_i16g4")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="BackWall"]
-position = Vector2(950, 242)
-shape = SubResource("RectangleShape2D_smfwi")
-
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
-position = Vector2(968, 245)
-shape = SubResource("RectangleShape2D_smfwi")
+[node name="Boundary2" parent="." instance=ExtResource("4_1k5a0")]
+position = Vector2(1047, 251)
+scale = Vector2(1.01793, 60.9379)
+playerGoal = 2
 
 [connection signal="timeout" from="Labels/Ready/Timer" to="Labels/Ready" method="_on_timer_timeout"]
-[connection signal="game_lost" from="Boundary" to="Labels/Ready" method="_on_boundary_game_lost"]
-[connection signal="game_lost" from="Boundary" to="Labels/Score" method="_on_boundary_game_lost"]
-[connection signal="game_lost" from="Boundary" to="Ball" method="_on_boundary_game_lost"]
-[connection signal="area_entered" from="BackWall" to="BackWall" method="_on_area_entered"]
-[connection signal="scoreUp" from="BackWall" to="Labels/Score" method="_on_back_wall_score_up"]
+[connection signal="game_reset" from="Boundary" to="Labels/Score" method="_on_boundary_game_reset"]
+[connection signal="game_reset" from="Boundary" to="Ball" method="_on_boundary_game_reset"]
+[connection signal="game_reset" from="Boundary2" to="Labels/Score" method="_on_boundary_game_reset"]
+[connection signal="game_reset" from="Boundary2" to="Ball" method="_on_boundary_game_reset"]

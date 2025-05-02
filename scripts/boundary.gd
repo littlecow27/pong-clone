@@ -1,6 +1,10 @@
-extends Node2D
+extends Area2D
 
-signal game_lost
+@export var playerGoal = 1
+
+signal game_reset(player: int)
 
 func _on_area_entered(area: Area2D) -> void:
-	game_lost.emit()
+	print("oh no!");
+	emit_signal("game_reset", playerGoal)
+	

@@ -1,24 +1,21 @@
 extends RichTextLabel
 
-var score
-var highScore
+var P1_Score
+var P2_Score
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	score = 0
-	highScore = 0
+	P1_Score = 0
+	P2_Score = 0
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	text = "  High Score: "+str(highScore)+"\n  Score: "+str(score)
-	if score > highScore:
-		highScore = score
-
-func _on_back_wall_score_up() -> void:
-	score += 1
+	text = "[center]"+str(P1_Score)+"-"+str(P2_Score)
 
 
-
-func _on_boundary_game_lost() -> void:
-	score = 0
+func _on_boundary_game_reset(player: int) -> void:
+	if player == 1:
+		P1_Score += 1
+	elif player == 2:
+		P2_Score += 1
